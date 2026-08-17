@@ -1,0 +1,62 @@
+:root {
+  color-scheme: light;
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  color: #3f3644;
+  background: #f7f2ea;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #3f3644;
+  --muted: #7a6f7c;
+  --void: #f7f2ea;
+  --paper: #fcf8f2;
+  --violet: #8a6a9f;
+  --violet-deep: #5c446c;
+  --violet-mist: #c4a8d4;
+  --sage: #6a8a72;
+  --sage-deep: #4f6b56;
+  --gold: #b8945a;
+  --gold-soft: rgba(184, 148, 90, 0.35);
+  --cyan: #6a8a72;
+  --green: #6a8a72;
+  --surface: rgba(252, 248, 242, 0.92);
+  --line: rgba(116, 81, 143, 0.2);
+  --glow-violet: 0 14px 42px rgba(116, 81, 143, 0.14);
+  --glow-cyan: 0 12px 30px rgba(106, 138, 114, 0.16);
+  --glow-gold: 0 0 28px rgba(184, 148, 90, 0.28);
+  --radius: 8px;
+  --reveal-birthday: 0ms;
+  --reveal-path: 480ms;
+  --reveal-core: 980ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--void);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 3px;
+}
