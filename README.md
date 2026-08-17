@@ -13,7 +13,7 @@ npm run build
 
 ## GitHub Pages
 
-推送到 `main` 後，`.github/workflows/deploy-pages.yml` 會執行測試、建置並部署 `dist`。
+正式站由 `gh-pages` 分支提供。執行測試與 `npm run build` 後，將 `dist` 內容發布到該分支即可更新網站。
 Vite 使用相對資源路徑，可直接部署在 GitHub Pages 的專案子路徑。
 
 ## 專案結構
