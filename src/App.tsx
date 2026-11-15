@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { HologramDiagram } from './features/hologram/HologramDiagram'
 import { BirthdayForm } from './features/input/BirthdayForm'
-import { AiPromptSection } from './features/results/AiPromptSection'
 import { AnalysisModal } from './features/results/AnalysisModal'
 import { BasicAnalysis } from './features/results/BasicAnalysis'
 import { ResultSummary } from './features/results/ResultSummary'
@@ -68,7 +67,6 @@ export default function App() {
               >
                 完整解析
               </button>
-              <a className="button button--ghost" href="#ai-prompt">延伸提問</a>
             </div>
           ) : (
             <p className="console__hint">輸入西元生日，數字會依序落入「全」字。</p>
@@ -86,7 +84,6 @@ export default function App() {
           onClose={() => setIsAnalysisOpen(false)}
         />
       )}
-      {result && <AiPromptSection result={result} />}
       {result && <ResultSummary nodes={result.nodes} />}
     </main>
   )

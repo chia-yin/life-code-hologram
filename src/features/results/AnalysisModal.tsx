@@ -4,6 +4,7 @@ import { getDigitModes } from './digit-modes'
 import { getElementPatterns, type ElementPatternReading } from './element-patterns'
 import { DIGIT_PROFILES } from './interpretations'
 import { ANALYSIS_GROUPS, POSITION_PROFILES } from './position-profiles'
+import { buildElementReason, buildPositionNarrative } from './reading-narrative'
 
 interface AnalysisModalProps {
   result: HologramResult
@@ -32,9 +33,8 @@ function PositionReading({
         <span className="reading__digit" aria-label={`${position.label} 數字 ${digit}`}>{digit}</span>
         <h4>{position.label}</h4>
       </div>
-      <p className="reading__role">位置功能：{position.role}</p>
       <strong>{digitProfile.title}｜{digitProfile.keywords}</strong>
-      <p>{digitProfile.description}</p>
+      <p className="reading__narrative">{buildPositionNarrative(node, digit)}</p>
       {showModes && (
         <ul className="reading__modes">
           {modes.map((mode) => (
@@ -73,9 +73,7 @@ function ElementPatternCard({ pattern }: { pattern: ElementPatternReading }) {
           {pattern.majorLabel} {pattern.majorDigit} × {pattern.minorLabel} {pattern.minorDigit}
         </strong>
       </header>
-      <p className="element-card__active">
-        目前落點：{pattern.active.condition}｜{pattern.active.title}
-      </p>
+      <p className="element-card__active">{buildElementReason(pattern)}</p>
       <div className="element-matrix" aria-label={`${pattern.label}象限`}>
         {pattern.quadrants.map((quadrant) => (
           <div

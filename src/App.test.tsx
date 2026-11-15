@@ -52,20 +52,23 @@ describe('生命密碼全息解析頁', () => {
     expect(screen.queryByRole('heading', { name: '生命密碼結構解析' })).not.toBeInTheDocument()
   })
 
-  it('有效生日顯示全息圖、基本分析與延伸提問', async () => {
+  it('有效生日顯示全息圖與基本分析', async () => {
     render(<App />)
     await submitBirthday('1984-12-25')
 
     expect(screen.getByTestId('diagram')).toHaveTextContent('主性格：5')
     expect(screen.getByRole('heading', { name: '基本分析' })).toBeInTheDocument()
     expect(screen.getByText('彈性探索')).toBeInTheDocument()
+    expect(screen.getByText(/主性格落在 5「彈性探索」/)).toBeInTheDocument()
     expect(screen.getByText('多做想少')).toBeInTheDocument()
+    expect(screen.getByText(/偏向先行動再校正/)).toBeInTheDocument()
     expect(screen.getByText('極度冰封')).toBeInTheDocument()
+    expect(screen.getByText(/全圖有2、有7，落在「極度冰封」/)).toBeInTheDocument()
     expect(screen.getByText('零星燃點')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '完整解析' })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: '生命密碼結構解析' })).not.toBeInTheDocument()
-    expect(screen.getByRole('region', { name: '延伸提問' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '複製「整體解析」提示詞' })).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: '延伸提問' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /提示詞/ })).not.toBeInTheDocument()
   })
 
   it('結構解析逐一呈現位置、來源與數字特質並可關閉', async () => {
@@ -76,11 +79,12 @@ describe('生命密碼全息解析頁', () => {
     expect(screen.getByRole('dialog', { name: '生命密碼結構解析' })).toBeInTheDocument()
     expect(screen.getByText('核心行為模式')).toBeInTheDocument()
     expect(screen.getByText('水火象限')).toBeInTheDocument()
-    expect(screen.getByText(/目前落點：有2、有7/)).toBeInTheDocument()
-    expect(screen.getByText(/目前落點：有3、有8/)).toBeInTheDocument()
+    const dialog = screen.getByRole('dialog', { name: '生命密碼結構解析' })
+    expect(dialog).toHaveTextContent(/全圖有2、有7，落在「極度冰封」/)
+    expect(dialog).toHaveTextContent(/全圖有3、有8，落在「零星燃點」/)
     expect(screen.getByText('個人側翼')).toBeInTheDocument()
     expect(screen.getByText('社會側翼')).toBeInTheDocument()
-    expect(screen.getByText('位置功能：判斷、選擇與自我定位的核心模式')).toBeInTheDocument()
+    expect(dialog).toHaveTextContent(/在「核心主性格」這個位置/)
     expect(screen.getAllByText('優勢表現')).toHaveLength(24)
     expect(screen.queryByText('生命密碼沒有好壞之分')).not.toBeInTheDocument()
 
@@ -96,37 +100,13 @@ describe('生命密碼全息解析頁', () => {
 
     const dialog = screen.getByRole('dialog', { name: '核心主性格解析' })
     expect(dialog).toBeInTheDocument()
-    expect(dialog).toHaveTextContent('位置功能：判斷、選擇與自我定位的核心模式')
+    expect(dialog).toHaveTextContent('在「核心主性格」這個位置')
+    expect(dialog).toHaveTextContent('判斷、選擇與自我定位的核心模式')
+    expect(dialog).toHaveTextContent('數字 5「彈性探索」')
     expect(dialog).toHaveTextContent('思維節奏')
     expect(dialog).toHaveTextContent('多做想少')
     expect(screen.getAllByText('優勢表現')).toHaveLength(1)
     expect(screen.queryByText('個人側翼')).not.toBeInTheDocument()
-  })
-
-  it('可切換解析面向並複製對應提示詞', async () => {
-    render(<App />)
-    const user = await submitBirthday('2000-01-01')
-    const writeText = vi.fn().mockResolvedValue(undefined)
-    Object.defineProperty(navigator, 'clipboard', {
-      configurable: true,
-      value: { writeText },
-    })
-
-    expect(screen.queryByLabelText('人工智慧解析提示詞')).not.toBeInTheDocument()
-
-    await user.click(screen.getByRole('button', { name: '銷售與吸引' }))
-    await user.click(screen.getByRole('button', { name: '複製「銷售與吸引」提示詞' }))
-    const copiedPrompt = writeText.mock.calls[0][0] as string
-    expect(copiedPrompt).toContain('西元生日：2000-01-01')
-    expect(copiedPrompt).toContain('核心主性格（O＝M＋N）：9')
-    expect(copiedPrompt).toContain('年份後段（L＝G＋H）：5')
-    expect(copiedPrompt).toContain('【核心主性格行為模式】')
-    expect(copiedPrompt).toContain('思維節奏：少做多想')
-    expect(copiedPrompt).toContain('【水火象限】')
-    expect(copiedPrompt).toContain('閃電火花')
-    expect(copiedPrompt).toContain('若兩個加數都是 0，特殊記為 5')
-    expect(copiedPrompt).toContain('如何向這個人銷售，以及如何吸引他的注意與信任')
-    expect(screen.getByRole('button', { name: '已複製，可以貼上了' })).toBeInTheDocument()
   })
 
   it('沒有逐步導覽按鈕', async () => {

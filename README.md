@@ -22,7 +22,6 @@ Vite 使用相對資源路徑，可直接部署在 GitHub Pages 的專案子路�
 - `src/features/results/interpretations.ts`：0–9 數字特質文案。
 - `src/features/results/AnalysisModal.tsx`：以「查看結構解析」彈窗逐一呈現 24 個位置的來源、功能與數字特質。
 - `src/features/results/position-profiles.ts`：集中記錄所有節點的位置名稱、計算來源與解析角色。
-- `src/features/results/AiPromptSection.tsx`：依目前結果產生整體、銷售吸引、合作、相處與衝突溝通等可一鍵複製的提示詞。
 - `src/features/hologram/node-layout.ts`：節點座標、「全」字筆劃路徑與揭曉階段。
 - `src/features/hologram/HologramDiagram.tsx`：SVG 字骨架加上 HTML 節點的全息圖。
 - `src/styles/`：米白、淡紫、鼠尾草綠響應式視覺系統。
@@ -43,4 +42,4 @@ Vite 使用相對資源路徑，可直接部署在 GitHub Pages 的專案子路�
 
 ## 內容限制
 
-頁面沒有逐步導覽，輸入生日後會以約 1.5 秒依序揭曉生日數字、「全」字筆劃與核心主性格；點擊圖中數字可查看該位置解析，也可由按鈕開啟完整解析。目前解析由本地數字特質資料產生，不需網路或外部服務；頁面另提供多面向提示詞的一鍵複製功能。日後若改為站內串接人工智慧，服務金鑰不可放在前端程式碼中。
+頁面沒有逐步導覽，輸入生日後會以約 1.5 秒依序揭曉生日數字、「全」字筆劃與核心主性格；點擊圖中數字可查看該位置解析，也可由按鈕開啟完整解析。目前解析由本地數字特質資料產生，不需網路或外部服務。

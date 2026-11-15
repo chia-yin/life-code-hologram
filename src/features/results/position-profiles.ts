@@ -10,7 +10,7 @@ export interface PositionProfile {
  * 全息圖位置語意表。
  *
  * `source` 只描述可驗證的計算來源；`role` 是解析時使用的觀察面向。
- * 將位置定義集中在此處，避免畫面、提示詞與解析文案各自命名。
+ * 將位置定義集中在此處，避免畫面與解析文案各自命名。
  */
 export const POSITION_PROFILES: Record<NodeKey, PositionProfile> = {
   A: { label: '出生日十位', source: '日期第一碼', role: '早期反應與行動起點' },

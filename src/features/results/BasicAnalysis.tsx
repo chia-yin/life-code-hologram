@@ -3,6 +3,7 @@ import { getDigitModes } from './digit-modes'
 import { getElementPatterns } from './element-patterns'
 import { DIGIT_PROFILES } from './interpretations'
 import { POSITION_PROFILES } from './position-profiles'
+import { buildCoreNarrative, buildElementReason } from './reading-narrative'
 
 interface BasicAnalysisProps {
   result: HologramResult
@@ -13,9 +14,11 @@ export function BasicAnalysis({ result }: BasicAnalysisProps) {
   const coreProfile = DIGIT_PROFILES[coreDigit]
   const modes = getDigitModes(coreDigit)
   const elements = getElementPatterns(result.nodes)
-  const inner = POSITION_PROFILES.I
-  const outerLeft = POSITION_PROFILES.P
-  const outerRight = POSITION_PROFILES.Q
+  const focusPoints = [
+    { node: 'I' as const, profile: POSITION_PROFILES.I },
+    { node: 'P' as const, profile: POSITION_PROFILES.P },
+    { node: 'Q' as const, profile: POSITION_PROFILES.Q },
+  ]
 
   return (
     <section className="basic-analysis panel" id="basic-analysis" aria-labelledby="basic-analysis-title">
@@ -29,6 +32,7 @@ export function BasicAnalysis({ result }: BasicAnalysisProps) {
           <p>核心主性格</p>
           <strong>{coreProfile.title}</strong>
           <span>{coreProfile.keywords}</span>
+          <p className="basic-analysis__narrative">{buildCoreNarrative(coreDigit)}</p>
         </div>
       </article>
 
@@ -37,6 +41,7 @@ export function BasicAnalysis({ result }: BasicAnalysisProps) {
           <li key={mode.id}>
             <span>{mode.label}</span>
             <strong>{mode.value}</strong>
+            <p>{mode.summary}</p>
           </li>
         ))}
       </ul>
@@ -46,24 +51,23 @@ export function BasicAnalysis({ result }: BasicAnalysisProps) {
           <article key={pattern.id} className={`basic-analysis__element basic-analysis__element--${pattern.id}`}>
             <p>{pattern.label}</p>
             <strong>{pattern.active.title}</strong>
-            <span>{pattern.active.description}</span>
+            <span>{buildElementReason(pattern)}</span>
           </article>
         ))}
       </div>
 
       <ul className="basic-analysis__points">
-        <li>
-          <span>{inner.label}</span>
-          <strong>{result.nodes.I}　{DIGIT_PROFILES[result.nodes.I].title}</strong>
-        </li>
-        <li>
-          <span>{outerLeft.label}</span>
-          <strong>{result.nodes.P}　{DIGIT_PROFILES[result.nodes.P].title}</strong>
-        </li>
-        <li>
-          <span>{outerRight.label}</span>
-          <strong>{result.nodes.Q}　{DIGIT_PROFILES[result.nodes.Q].title}</strong>
-        </li>
+        {focusPoints.map(({ node, profile }) => {
+          const digit = result.nodes[node]
+          const digitProfile = DIGIT_PROFILES[digit]
+          return (
+            <li key={node}>
+              <span>{profile.label}</span>
+              <strong>{digit}　{digitProfile.title}</strong>
+              <p>{profile.role}：{digitProfile.description}</p>
+            </li>
+          )
+        })}
       </ul>
     </section>
   )
