@@ -68,7 +68,7 @@ export default function App() {
               >
                 完整解析
               </button>
-              <a className="button button--ghost" href="#ai-analysis">AI 解析</a>
+              <a className="button button--ghost" href="#ai-analysis">深入了解</a>
             </div>
           ) : (
             <p className="console__hint">輸入西元生日，數字會依序落入「全」字。</p>

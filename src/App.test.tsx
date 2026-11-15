@@ -66,8 +66,11 @@ describe('生命密碼全息解析頁', () => {
     expect(screen.getByText(/全圖有2、有7，落在「極度冰封」/)).toBeInTheDocument()
     expect(screen.getByText('零星燃點')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '完整解析' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'AI 解析' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '開始 AI 解析' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '深入了解' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '開始「逐項讀懂」' })).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: /逐項讀懂/ })).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: /串聯提醒/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '深入了解' })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: '生命密碼結構解析' })).not.toBeInTheDocument()
     expect(screen.queryByRole('region', { name: '延伸提問' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /提示詞/ })).not.toBeInTheDocument()
@@ -111,25 +114,31 @@ describe('生命密碼全息解析頁', () => {
     expect(screen.queryByText('個人側翼')).not.toBeInTheDocument()
   })
 
-  it('可請求 AI 解析並顯示結果', async () => {
+  it('可請求 AI 解析並以面向區塊呈現', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ analysis: '這是一段測試用的 AI 解析。' }),
+      json: async () => ({
+        analysis: '## 人格輪廓\n外放而敏銳。\n\n## 核心主性格\n數字偏向創意表達。',
+      }),
     })
     vi.stubGlobal('fetch', fetchMock)
 
     render(<App />)
     const user = await submitBirthday('1984-12-25')
-    await user.click(screen.getByRole('button', { name: '銷售與吸引' }))
-    await user.click(screen.getByRole('button', { name: '開始 AI 解析' }))
+    await user.click(screen.getByRole('tab', { name: /串聯提醒/ }))
+    await user.click(screen.getByRole('button', { name: '開始「串聯提醒」' }))
 
-    expect(await screen.findByText('這是一段測試用的 AI 解析。')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: '人格輪廓' })).toBeInTheDocument()
+    expect(screen.getByText('外放而敏銳。')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '核心主性格' })).toBeInTheDocument()
+    expect(screen.queryByText(/## /)).not.toBeInTheDocument()
     expect(fetchMock).toHaveBeenCalledWith(
       '/api/analyze',
       expect.objectContaining({ method: 'POST' }),
     )
     const body = JSON.parse((fetchMock.mock.calls[0][1] as RequestInit).body as string)
-    expect(body.prompt).toContain('如何向這個人銷售')
+    expect(body.prompt).toContain('頁面基本分析')
+    expect(body.prompt).toContain('串成一幅可理解的圖')
     expect(body.prompt).toContain('西元生日：1984-12-25')
   })
 

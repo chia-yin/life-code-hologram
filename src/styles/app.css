@@ -944,23 +944,37 @@
 }
 
 .ai-analysis__focus {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
   margin-bottom: 18px;
 }
 
 .ai-analysis__focus button {
-  border: 1px solid rgba(138, 106, 159, 0.2);
-  border-radius: 999px;
-  padding: 9px 16px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(138, 106, 159, 0.18);
+  border-radius: 18px;
+  padding: 14px 12px;
   color: #6e6172;
   background: rgba(255, 255, 255, 0.72);
   cursor: pointer;
-  font-size: 12px;
+  text-align: center;
   transition: color 180ms ease, border-color 180ms ease, background 180ms ease,
     box-shadow 180ms ease, transform 180ms ease;
+}
+
+.ai-analysis__focus button strong {
+  color: var(--ink);
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ai-analysis__focus button span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .ai-analysis__focus button:hover {
@@ -969,10 +983,14 @@
 }
 
 .ai-analysis__focus button[aria-pressed="true"] {
-  border-color: var(--sage);
-  color: #fff;
-  background: linear-gradient(135deg, #6f9077, #5d7d64);
-  box-shadow: 0 8px 20px rgba(79, 107, 86, 0.2);
+  border-color: rgba(106, 138, 114, 0.55);
+  background:
+    linear-gradient(165deg, rgba(106, 138, 114, 0.16), rgba(255, 255, 255, 0.82));
+  box-shadow: 0 10px 24px rgba(79, 107, 86, 0.12);
+}
+
+.ai-analysis__focus button[aria-pressed="true"] strong {
+  color: var(--sage-deep);
 }
 
 .ai-analysis__actions {
@@ -989,16 +1007,49 @@
 }
 
 .ai-analysis__result {
+  display: grid;
+  gap: 12px;
   border-top: 1px solid rgba(138, 106, 159, 0.14);
   padding-top: 18px;
 }
 
-.ai-analysis__result p {
-  margin: 0 0 12px;
+.ai-analysis__block {
+  border: 1px solid rgba(138, 106, 159, 0.12);
+  border-radius: 18px;
+  padding: 16px 18px 14px;
+  background: rgba(255, 253, 248, 0.88);
+}
+
+.ai-analysis__block h3 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ai-analysis__block p {
+  margin: 0 0 10px;
   color: #5f5563;
   font-size: 14px;
   line-height: 1.8;
-  white-space: pre-wrap;
+}
+
+.ai-analysis__block p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-analysis__block ul {
+  margin: 0;
+  padding: 0 0 0 1.1em;
+  color: #5f5563;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.ai-analysis__block li + li {
+  margin-top: 4px;
 }
 
 .panel {
@@ -1094,7 +1145,8 @@
   .element-matrix,
   .basic-analysis__modes,
   .basic-analysis__elements,
-  .basic-analysis__points {
+  .basic-analysis__points,
+  .ai-analysis__focus {
     grid-template-columns: 1fr;
   }
 
