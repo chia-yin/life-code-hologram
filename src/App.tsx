@@ -3,6 +3,7 @@ import { HologramDiagram } from './features/hologram/HologramDiagram'
 import { BirthdayForm } from './features/input/BirthdayForm'
 import { AiPromptSection } from './features/results/AiPromptSection'
 import { AnalysisModal } from './features/results/AnalysisModal'
+import { BasicAnalysis } from './features/results/BasicAnalysis'
 import { ResultSummary } from './features/results/ResultSummary'
 import { parseBirthday, type HologramResult, type NodeKey } from './lib/hologram'
 
@@ -56,15 +57,16 @@ export default function App() {
 
           {result ? (
             <div className="console__actions">
+              <a className="button button--outline" href="#basic-analysis">查看基本分析</a>
               <button
-                className="button button--outline"
+                className="button button--ghost"
                 type="button"
                 onClick={() => {
                   setSelectedNode(null)
                   setIsAnalysisOpen(true)
                 }}
               >
-                查看完整解析
+                完整解析
               </button>
               <a className="button button--ghost" href="#ai-prompt">延伸提問</a>
             </div>
@@ -73,6 +75,8 @@ export default function App() {
           )}
         </section>
       </div>
+
+      {result && <BasicAnalysis result={result} />}
 
       {result && (
         <AnalysisModal

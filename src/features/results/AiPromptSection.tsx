@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import type { HologramResult, NodeKey } from '../../lib/hologram'
+import { getDigitModes } from './digit-modes'
+import { getElementPatterns } from './element-patterns'
 import { DIGIT_PROFILES } from './interpretations'
 import { POSITION_PROFILES } from './position-profiles'
 
@@ -60,6 +62,24 @@ function describeNode(node: NodeKey, result: HologramResult) {
   return `${position.label}（${node}＝${position.source}）：${digit}（${profile.title}；${profile.keywords}）`
 }
 
+function describeModes(digit: number) {
+  return getDigitModes(digit)
+    .map((mode) => `${mode.label}：${mode.value}（${mode.summary}）`)
+    .join('\n')
+}
+
+function describeElementPatterns(result: HologramResult) {
+  return getElementPatterns(result.nodes)
+    .map((pattern) => {
+      const presence = [
+        `${pattern.minorLabel}${pattern.minorDigit}：${pattern.hasMinor ? '有' : '沒有'}`,
+        `${pattern.majorLabel}${pattern.majorDigit}：${pattern.hasMajor ? '有' : '沒有'}`,
+      ].join('；')
+      return `${pattern.label}（${presence}）→ ${pattern.active.title}：${pattern.active.description}`
+    })
+    .join('\n')
+}
+
 export function buildAiPrompt(result: HologramResult, focus: PromptFocus = 'overall') {
   const { nodes } = result
 
@@ -79,6 +99,12 @@ ${describeNode('R', result)}
 ${describeNode('S', result)}
 ${describeNode('T', result)}
 
+【核心主性格行為模式】
+${describeModes(nodes.O)}
+
+【水火象限】
+${describeElementPatterns(result)}
+
 【完整計算節點】
 第一層：${nodes.I}、${nodes.J}、${nodes.K}、${nodes.L}
 第二層：${nodes.M}、${nodes.N}
@@ -93,7 +119,7 @@ ${describeNode('T', result)}
 【本次解析面向】
 ${FOCUS_REQUESTS[focus]}
 
-請把每項判讀連結到上述數字特質，避免空泛套話。不要斷言命運、疾病、財富或關係結果；若資訊不足，請明確說明這是一種自我觀察角度，而不是確定判斷。`
+請把每項判讀連結到上述數字特質與行為模式，避免空泛套話。不要斷言命運、疾病、財富或關係結果；若資訊不足，請明確說明這是一種自我觀察角度，而不是確定判斷。`
 }
 
 export function AiPromptSection({ result }: AiPromptSectionProps) {

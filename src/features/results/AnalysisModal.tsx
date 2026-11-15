@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import type { HologramResult, NodeKey } from '../../lib/hologram'
+import { getDigitModes } from './digit-modes'
+import { getElementPatterns, type ElementPatternReading } from './element-patterns'
 import { DIGIT_PROFILES } from './interpretations'
 import { ANALYSIS_GROUPS, POSITION_PROFILES } from './position-profiles'
 
@@ -10,10 +12,19 @@ interface AnalysisModalProps {
   onClose: () => void
 }
 
-function PositionReading({ node, result }: { node: NodeKey; result: HologramResult }) {
+function PositionReading({
+  node,
+  result,
+  showModes = false,
+}: {
+  node: NodeKey
+  result: HologramResult
+  showModes?: boolean
+}) {
   const digit = result.nodes[node]
   const digitProfile = DIGIT_PROFILES[digit]
   const position = POSITION_PROFILES[node]
+  const modes = showModes ? getDigitModes(digit) : []
 
   return (
     <article className="reading__position">
@@ -24,6 +35,17 @@ function PositionReading({ node, result }: { node: NodeKey; result: HologramResu
       <p className="reading__role">位置功能：{position.role}</p>
       <strong>{digitProfile.title}｜{digitProfile.keywords}</strong>
       <p>{digitProfile.description}</p>
+      {showModes && (
+        <ul className="reading__modes">
+          {modes.map((mode) => (
+            <li key={mode.id}>
+              <span>{mode.label}</span>
+              <strong>{mode.value}</strong>
+              <p>{mode.summary}</p>
+            </li>
+          ))}
+        </ul>
+      )}
       <dl>
         <div>
           <dt>優勢表現</dt>
@@ -38,6 +60,34 @@ function PositionReading({ node, result }: { node: NodeKey; result: HologramResu
           <dd>{digitProfile.development}</dd>
         </div>
       </dl>
+    </article>
+  )
+}
+
+function ElementPatternCard({ pattern }: { pattern: ElementPatternReading }) {
+  return (
+    <article className={`element-card element-card--${pattern.id}`}>
+      <header>
+        <p>{pattern.label}</p>
+        <strong>
+          {pattern.majorLabel} {pattern.majorDigit} × {pattern.minorLabel} {pattern.minorDigit}
+        </strong>
+      </header>
+      <p className="element-card__active">
+        目前落點：{pattern.active.condition}｜{pattern.active.title}
+      </p>
+      <div className="element-matrix" aria-label={`${pattern.label}象限`}>
+        {pattern.quadrants.map((quadrant) => (
+          <div
+            key={quadrant.id}
+            className={`element-cell ${quadrant.id === pattern.active.id ? 'is-active' : ''}`}
+          >
+            <span>{quadrant.condition}</span>
+            <strong>{quadrant.title}</strong>
+            <p>{quadrant.description}</p>
+          </div>
+        ))}
+      </div>
     </article>
   )
 }
@@ -76,9 +126,37 @@ export function AnalysisModal({ result, isOpen, selectedNode, onClose }: Analysi
         </div>
 
         <div className={`reading ${selectedNode ? 'reading--focused' : ''}`}>
+          {!selectedNode && (
+            <>
+              <section className="reading__overview" aria-labelledby="mode-overview-title">
+                <h3 id="mode-overview-title">核心行為模式</h3>
+                <p>依主性格 {result.nodes.O} 推導四種日常切入方式。</p>
+                <ul className="reading__modes reading__modes--overview">
+                  {getDigitModes(result.nodes.O).map((mode) => (
+                    <li key={mode.id}>
+                      <span>{mode.label}</span>
+                      <strong>{mode.value}</strong>
+                      <p>{mode.summary}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="reading__overview" aria-labelledby="element-overview-title">
+                <h3 id="element-overview-title">水火象限</h3>
+                <p>依全圖有無小水 2／大水 7、小火 3／大火 8 判斷情緒與冷暴力傾向。</p>
+                <div className="element-grid">
+                  {getElementPatterns(result.nodes).map((pattern) => (
+                    <ElementPatternCard key={pattern.id} pattern={pattern} />
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
+
           {selectedNode ? (
             <div className="reading__positions">
-              <PositionReading node={selectedNode} result={result} />
+              <PositionReading node={selectedNode} result={result} showModes />
             </div>
           ) : ANALYSIS_GROUPS.map((group) => (
             <section key={group.id} className="reading__group" aria-labelledby={`group-${group.id}`}>
