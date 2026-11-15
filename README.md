@@ -16,6 +16,17 @@ npm run build
 正式站由 `gh-pages` 分支提供。執行測試與 `npm run build` 後，將 `dist` 內容發布到該分支即可更新網站。
 Vite 使用相對資源路徑，可直接部署在 GitHub Pages 的專案子路徑。
 
+## AI 解析
+
+本機開發時，Vite 會把 `/api/analyze` 代理到 OpenAI；請在 `.env.local` 設定 `OPENAI_API_KEY`（勿提交）。
+正式站請另部署 `worker/` 的 Cloudflare Worker，並在建置時設定：
+
+```bash
+VITE_AI_API_URL=https://life-code-ai.<subdomain>.workers.dev npm run build
+```
+
+Worker 的 `OPENAI_API_KEY` 用 `wrangler secret` 或 `--secrets-file` 注入，不可寫進前端程式碼。
+
 ## 專案結構
 
 - `src/lib/hologram.ts`：生日驗證、單一數字縮減與 A–X 節點純函式計算。

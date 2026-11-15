@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { HologramDiagram } from './features/hologram/HologramDiagram'
 import { BirthdayForm } from './features/input/BirthdayForm'
+import { AiAnalysisSection } from './features/results/AiAnalysisSection'
 import { AnalysisModal } from './features/results/AnalysisModal'
 import { BasicAnalysis } from './features/results/BasicAnalysis'
 import { ResultSummary } from './features/results/ResultSummary'
@@ -67,6 +68,7 @@ export default function App() {
               >
                 完整解析
               </button>
+              <a className="button button--ghost" href="#ai-analysis">AI 解析</a>
             </div>
           ) : (
             <p className="console__hint">輸入西元生日，數字會依序落入「全」字。</p>
@@ -75,6 +77,7 @@ export default function App() {
       </div>
 
       {result && <BasicAnalysis result={result} />}
+      {result && <AiAnalysisSection result={result} />}
 
       {result && (
         <AnalysisModal
