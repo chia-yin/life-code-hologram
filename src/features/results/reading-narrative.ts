@@ -13,7 +13,7 @@ export function buildCoreNarrative(digit: number) {
 export function buildElementReason(pattern: ElementPatternReading) {
   const minorState = pattern.hasMinor ? `有${pattern.minorDigit}` : `沒${pattern.minorDigit}`
   const majorState = pattern.hasMajor ? `有${pattern.majorDigit}` : `沒${pattern.majorDigit}`
-  return `全圖${minorState}、${majorState}，落在「${pattern.active.title}」。${pattern.active.description}`
+  return `推導圖${minorState}、${majorState}（不含生日八碼），落在「${pattern.active.title}」。${pattern.active.description}`
 }
 
 /** 位置 × 數字：單點／結構解析的因果敘事 */

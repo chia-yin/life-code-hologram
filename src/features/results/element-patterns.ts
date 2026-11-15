@@ -1,5 +1,12 @@
-import type { HologramNode } from '../../lib/hologram'
-import { NODE_KEYS } from '../../lib/hologram'
+import type { HologramNode, NodeKey } from '../../lib/hologram'
+
+/**
+ * 水火「全圖」只看推導結構（如 595／369／145 那幾排），
+ * 不含生日八碼 A–H，也不含左右翼延伸。
+ */
+export const ELEMENT_CHART_KEYS = [
+  'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+] as const satisfies readonly NodeKey[]
 
 export type ElementPatternId = 'water' | 'fire'
 
@@ -98,7 +105,7 @@ const FIRE_QUADRANTS: readonly ElementQuadrant[] = [
 ]
 
 function hasDigit(nodes: HologramNode, digit: number) {
-  return NODE_KEYS.some((key) => nodes[key] === digit)
+  return ELEMENT_CHART_KEYS.some((key) => nodes[key] === digit)
 }
 
 function pickQuadrant(

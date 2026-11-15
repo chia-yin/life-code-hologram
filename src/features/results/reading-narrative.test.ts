@@ -18,9 +18,9 @@ describe('reading narrative helpers', () => {
     const water = getElementPatterns(parseBirthday('1984-12-25').nodes).find((item) => item.id === 'water')
     expect(water).toBeDefined()
     const text = buildElementReason(water!)
-    expect(text).toContain('全圖有2、有7')
-    expect(text).toContain('極度冰封')
-    expect(text).toContain('極愛冷暴力')
+    expect(text).toContain('推導圖沒2、有7（不含生日八碼）')
+    expect(text).toContain('深海暗流')
+    expect(text).toContain('一旦觸發一次就長達半年')
   })
 
   it('位置敘事把角色與數字特質合成一句', () => {

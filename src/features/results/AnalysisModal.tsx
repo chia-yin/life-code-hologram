@@ -142,7 +142,7 @@ export function AnalysisModal({ result, isOpen, selectedNode, onClose }: Analysi
 
               <section className="reading__overview" aria-labelledby="element-overview-title">
                 <h3 id="element-overview-title">水火象限</h3>
-                <p>依全圖有無小水 2／大水 7、小火 3／大火 8 判斷情緒與冷暴力傾向。</p>
+                <p>依推導圖（如基礎、整合、表達那幾排，不含生日八碼）有無小水 2／大水 7、小火 3／大火 8 判斷。</p>
                 <div className="element-grid">
                   {getElementPatterns(result.nodes).map((pattern) => (
                     <ElementPatternCard key={pattern.id} pattern={pattern} />
